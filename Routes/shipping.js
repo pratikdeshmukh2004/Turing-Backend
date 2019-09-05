@@ -1,0 +1,29 @@
+module.exports=(shipping,knex)=>{
+    shipping.get("/regions",(req,res)=>{
+        knex.select("*").from("shipping_region")
+        .then((resp)=>{
+            res.send(resp)
+        })
+        .catch((err)=>{
+            res.send(err)
+        })
+    })
+    shipping.get("/regions/:shipping_id",(req,res)=>{
+        knex.select("*").from("shipping")
+        .join("shipping_region",function(){
+            this.on("shipping.shipping_region_id","shipping_region.shipping_region_id")
+        })
+        .where("shipping.shipping_region_id",req.params.shipping_id)
+        .then((resp)=>{
+            res.send(resp)
+            if(resp.length>0){
+                return res.send(resp)  
+            }else{
+                res.send({"error":"id not found"})
+            }
+        })  
+        .catch((err)=>{
+            res.send(err)
+        })
+    })
+}
