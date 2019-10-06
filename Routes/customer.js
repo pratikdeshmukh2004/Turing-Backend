@@ -1,4 +1,3 @@
-var facebook=require("passport-facebook");
 module.exports=(customer,knex,jwt)=>{    
     customer.post("/",(req,res)=>{
         console.log(req.body);
